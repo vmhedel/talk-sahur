@@ -1,6 +1,5 @@
 # Tung Tung Sahur
 
-Chat P2P sem login ou histórico. Os computadores precisam estar conectados à
-internet para se encontrarem; depois, as mensagens são enviadas diretamente
-entre os navegadores e não ficam salvas. A sinalização usa os relays públicos
-padrão do Trystero.
+Chat em tempo real sem login ou histórico. Os computadores precisam estar
+conectados à internet. As mensagens passam por um broker MQTT público e não
+são retidas; quem entrar depois não verá as anteriores.
