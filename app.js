@@ -27,26 +27,15 @@ function renderMessage(message) {
   const item = document.createElement("article");
   item.className = "message";
 
-  const heading = document.createElement("div");
-  heading.className = "message-heading";
-
   const name = document.createElement("strong");
   name.className = "message-name";
   name.textContent = message.name;
-
-  const time = document.createElement("time");
-  time.className = "message-time";
-  const date = new Date(message.createdAt);
-  time.textContent = Number.isNaN(date.getTime())
-    ? "agora"
-    : date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
   const text = document.createElement("p");
   text.className = "message-text";
   text.textContent = message.text;
 
-  heading.append(name, time);
-  item.append(heading, text);
+  item.append(name, text);
   messages.append(item);
 
   while (messages.childElementCount > maxVisibleMessages) {
@@ -57,9 +46,7 @@ function renderMessage(message) {
 }
 
 if (!config?.supabaseUrl || !config?.supabaseAnonKey) {
-  setStatus(
-    "A sala precisa ser configurada: adicione a URL e a chave pública do Supabase em config.js."
-  );
+  setStatus("Configure o Supabase");
 } else {
   const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey, {
     realtime: { params: { eventsPerSecond: 5 } },
@@ -77,13 +64,13 @@ if (!config?.supabaseUrl || !config?.supabaseAnonKey) {
     sendButton.disabled = !connected;
 
     if (connected) {
-      setStatus("Conectado. As mensagens aparecem apenas enquanto a sala está aberta.");
+      setStatus("Ao vivo");
     } else if (subscriptionStatus === "CHANNEL_ERROR" || subscriptionStatus === "TIMED_OUT") {
-      setStatus("Não foi possível conectar. Confira a configuração e tente recarregar a página.");
+      setStatus("Sem conexão");
     } else if (subscriptionStatus === "CLOSED") {
-      setStatus("A conexão com a sala foi encerrada.");
+      setStatus("Desconectado");
     } else {
-      setStatus("Conectando à sala...");
+      setStatus("Conectando...");
     }
   });
 
@@ -107,17 +94,17 @@ if (!config?.supabaseUrl || !config?.supabaseAnonKey) {
       });
 
       if (result !== "ok") {
-        setStatus("A mensagem não foi enviada. Tente novamente.");
+        setStatus("Falha ao enviar");
         return;
       }
 
       renderMessage(message);
       messageInput.value = "";
       messageInput.focus();
-      setStatus("Conectado. As mensagens aparecem apenas enquanto a sala está aberta.");
+      setStatus("Ao vivo");
     } catch (error) {
       console.error("Falha ao enviar mensagem:", error);
-      setStatus("Não foi possível enviar a mensagem. Confira sua conexão e tente novamente.");
+      setStatus("Falha ao enviar");
     } finally {
       sendButton.disabled = !connected;
     }
