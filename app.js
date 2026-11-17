@@ -6,7 +6,15 @@ const sendButton = document.querySelector("#send-button");
 const messages = document.querySelector("#messages");
 const maxVisibleMessages = 100;
 const room = "tung-tung-sahur";
-const channel = "BroadcastChannel" in window ? new BroadcastChannel(room) : null;
+let channel = null;
+
+try {
+  if ("BroadcastChannel" in window) {
+    channel = new BroadcastChannel(room);
+  }
+} catch (error) {
+  console.error("Falha ao abrir a sala local:", error);
+}
 
 status.textContent = channel ? "Só neste navegador" : "Só nesta aba";
 sendButton.disabled = false;
