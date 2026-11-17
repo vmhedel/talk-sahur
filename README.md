@@ -1,5 +1,6 @@
 # Tung Tung Sahur
 
-Chat local, sem login, servidor ou histórico. As mensagens existem apenas nas
-abas abertas do mesmo navegador. Para usar offline, abra a página uma vez com
-internet para ela ser armazenada no navegador.
+Chat P2P sem login ou histórico. Os computadores precisam estar conectados à
+internet para se encontrarem; depois, as mensagens são enviadas diretamente
+entre os navegadores e não ficam salvas. A sinalização usa os relays públicos
+padrão do Trystero.
