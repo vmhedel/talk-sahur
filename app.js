@@ -1,18 +1,15 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
 const status = document.querySelector("#chat-status");
 const form = document.querySelector("#message-form");
 const nameInput = document.querySelector("#name-input");
 const messageInput = document.querySelector("#message-input");
 const sendButton = document.querySelector("#send-button");
 const messages = document.querySelector("#messages");
-const config = window.CHAT_CONFIG;
 const maxVisibleMessages = 100;
-let connected = false;
+const room = "tung-tung-sahur";
+const channel = "BroadcastChannel" in window ? new BroadcastChannel(room) : null;
 
-function setStatus(message) {
-  status.textContent = message;
-}
+status.textContent = channel ? "Só neste navegador" : "Só nesta aba";
+sendButton.disabled = false;
 
 function renderMessage(message) {
   if (
@@ -45,68 +42,29 @@ function renderMessage(message) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-if (!config?.supabaseUrl || !config?.supabaseAnonKey) {
-  setStatus("Configure o Supabase");
-} else {
-  const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-    realtime: { params: { eventsPerSecond: 5 } },
-  });
-  const channel = supabase.channel("sala-aberta", {
-    config: { private: false, broadcast: { self: false } },
-  });
+if (channel) {
+  channel.addEventListener("message", (event) => renderMessage(event.data));
+}
 
-  channel.on("broadcast", { event: "message" }, ({ payload }) => {
-    renderMessage(payload);
-  });
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-  channel.subscribe((subscriptionStatus) => {
-    connected = subscriptionStatus === "SUBSCRIBED";
-    sendButton.disabled = !connected;
+  const message = {
+    name: nameInput.value.trim(),
+    text: messageInput.value.trim(),
+  };
+  if (!message.name || !message.text) {
+    return;
+  }
 
-    if (connected) {
-      setStatus("Ao vivo");
-    } else if (subscriptionStatus === "CHANNEL_ERROR" || subscriptionStatus === "TIMED_OUT") {
-      setStatus("Sem conexão");
-    } else if (subscriptionStatus === "CLOSED") {
-      setStatus("Desconectado");
-    } else {
-      setStatus("Conectando...");
-    }
-  });
+  renderMessage(message);
+  channel?.postMessage(message);
+  messageInput.value = "";
+  messageInput.focus();
+});
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const name = nameInput.value.trim();
-    const text = messageInput.value.trim();
-    if (!connected || !name || !text) {
-      return;
-    }
-
-    sendButton.disabled = true;
-    const message = { name, text, createdAt: new Date().toISOString() };
-
-    try {
-      const result = await channel.send({
-        type: "broadcast",
-        event: "message",
-        payload: message,
-      });
-
-      if (result !== "ok") {
-        setStatus("Falha ao enviar");
-        return;
-      }
-
-      renderMessage(message);
-      messageInput.value = "";
-      messageInput.focus();
-      setStatus("Ao vivo");
-    } catch (error) {
-      console.error("Falha ao enviar mensagem:", error);
-      setStatus("Falha ao enviar");
-    } finally {
-      sendButton.disabled = !connected;
-    }
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+    console.error("Falha ao habilitar modo offline:", error);
   });
 }
