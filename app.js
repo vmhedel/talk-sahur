@@ -45,6 +45,7 @@ function renderMessage(message) {
 if (!mqtt) {
   status.textContent = "Falha ao carregar o chat";
   sendButton.disabled = true;
+} else {
   try {
     client = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
       clientId: `talk-sahur-${senderId}`,
