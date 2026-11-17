@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+  color-scheme: dark;
+  --color-canvas-default: #19221d;
+  --color-canvas-overlay: #19221d;
+  --color-canvas-inset: #141c17;
+  --color-canvas-subtle: #1d2921;
+  --color-border-default: #344239;
+  --color-border-muted: #2a362e;
+  --color-neutral-muted: #89978d;
+  --color-fg-default: #eef4ee;
+  --color-fg-muted: #aab5ac;
+  --color-fg-subtle: #89978d;
+  --color-accent-fg: #b7f36b;
+  --color-btn-text: #eef4ee;
+  --color-btn-bg: #1d2921;
+  --color-btn-border: #344239;
+  --color-btn-hover-bg: #27362b;
+  --color-btn-primary-text: #172010;
+  --color-btn-primary-bg: #b7f36b;
+  --color-btn-primary-border: #b7f36b;
+  --color-btn-primary-hover-bg: #c8fa89;
+  --color-btn-primary-hover-border: #c8fa89;
+  --color-btn-primary-disabled-bg: #879d68;
+  --color-btn-primary-disabled-border: #879d68;
+  --color-action-list-item-default-hover-bg: #243128;
+  --color-social-reaction-bg-hover: #243128;
+  --color-social-reaction-bg-reacted-hover: #31452c;
+  font-family: "DM Sans", sans-serif;
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101714">
+    <meta
+      name="description"
+      content="Uma sala comunitária para conversar e compartilhar mensagens."
+    >
+    <title>Sala de conversa</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Sala de conversa, início">
+          <span class="brand-mark" aria-hidden="true">s</span>
+          <span>sala aberta</span>
+        </a>
+        <span class="online-indicator"><span aria-hidden="true"></span> ao vivo</span>
+      </header>
+
+      <section class="intro" aria-labelledby="room-title">
+        <p class="eyebrow">UM LUGAR PRA TROCAR IDEIA</p>
+        <h1 id="room-title">Chega mais.</h1>
+        <p class="intro-copy">
+          Escolha um nome e entre na conversa. Quem estiver na sala vê as mensagens na hora.
+        </p>
+        <div class="room-meta">
+          <span class="room-icon" aria-hidden="true">✳</span>
+          <span>Sala temporária</span>
+          <span class="meta-divider" aria-hidden="true"></span>
+          <span>Aberta pra todo mundo</span>
+        </div>
+      </section>
+
+      <section class="chat-card" aria-label="Mensagens da sala">
+        <div class="card-heading">
+          <div>
+            <p class="card-kicker">A CONVERSA</p>
+            <h2>Mensagens ao vivo</h2>
+          </div>
+          <span class="save-note"><span aria-hidden="true">✦</span> sem histórico</span>
+        </div>
+        <div id="chat-status" class="status" role="status" aria-live="polite">
+          Conectando à sala...
+        </div>
+        <form id="message-form" class="message-form">
+          <label for="name-input">Seu nome</label>
+          <input
+            id="name-input"
+            name="name"
+            type="text"
+            maxlength="24"
+            placeholder="Como quer aparecer?"
+            autocomplete="nickname"
+            required
+          >
+          <label for="message-input">Mensagem</label>
+          <div class="message-compose">
+            <input
+              id="message-input"
+              name="message"
+              type="text"
+              maxlength="500"
+              placeholder="Escreva uma mensagem..."
+              autocomplete="off"
+              required
+            >
+            <button id="send-button" type="submit" disabled>Enviar</button>
+          </div>
+        </form>
+        <div id="messages" class="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <noscript>
+          <p class="status">Ative o JavaScript para entrar na sala.</p>
+        </noscript>
+        <p class="privacy-note">
+          As mensagens não ficam salvas: só aparecem para quem está conectado agora.
+          Ao fechar ou atualizar a página, a conversa some.
+        </p>
+      </section>
+
+      <footer class="footer">
+        <span>Um espaço feito pela comunidade.</span>
+        <a href="https://github.com/vmhedel/talk-sahur" target="_blank" rel="noreferrer">
+          Feito no GitHub <span aria-hidden="true">↗</span>
+        </a>
+      </footer>
+    </main>
+  </body>
+</html>
