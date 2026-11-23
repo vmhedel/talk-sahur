@@ -1,4 +1,4 @@
-const CACHE_NAME = "tung-tung-sahur-v4";
+const CACHE_NAME = "tung-tung-sahur-v5";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js"];
 
 self.addEventListener("install", (event) => {

@@ -11,10 +11,36 @@ const mqtt = window.mqtt;
 let client;
 let connected = false;
 
+function getNameColor(senderId) {
+  let hash = 0;
+  for (const character of senderId) {
+    hash = (Math.imul(hash, 31) + character.charCodeAt(0)) >>> 0;
+  }
+
+  const hue = hash % 360;
+  const saturation = 70 + ((hash >>> 9) % 21);
+  const lightness = 65 + ((hash >>> 17) % 13);
+  return `hsl(${hue} ${saturation}% ${lightness}%)`;
+}
+
+function getImageUrl(text) {
+  if (text !== text.trim() || /\s/.test(text)) {
+    return null;
+  }
+
+  try {
+    const url = new URL(text);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function renderMessage(message) {
   if (
     typeof message?.name !== "string" ||
     typeof message?.text !== "string" ||
+    typeof message?.senderId !== "string" ||
     message.name.length > 24 ||
     message.text.length > 500
   ) {
@@ -27,12 +53,38 @@ function renderMessage(message) {
   const name = document.createElement("strong");
   name.className = "message-name";
   name.textContent = message.name;
+  name.style.color = getNameColor(message.senderId);
 
   const text = document.createElement("p");
   text.className = "message-text";
   text.textContent = message.text;
 
-  item.append(name, text);
+  item.append(name);
+
+  const imageUrl = getImageUrl(message.text);
+  if (imageUrl) {
+    text.hidden = true;
+
+    const imageLink = document.createElement("a");
+    imageLink.href = imageUrl;
+    imageLink.target = "_blank";
+    imageLink.rel = "noopener noreferrer";
+
+    const image = document.createElement("img");
+    image.className = "message-image";
+    image.alt = "Imagem enviada";
+    image.loading = "lazy";
+    image.addEventListener("error", () => {
+      imageLink.remove();
+      text.hidden = false;
+    }, { once: true });
+    image.src = imageUrl;
+
+    imageLink.append(image);
+    item.append(imageLink);
+  }
+
+  item.append(text);
   messages.append(item);
 
   while (messages.childElementCount > maxVisibleMessages) {
