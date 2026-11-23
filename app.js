@@ -36,6 +36,14 @@ function getImageUrls(text) {
           const value = candidate.replace(/[)\]},.!?;:*_]+$/, "");
           try {
             const url = new URL(value);
+            const isIpv4 = /^(?:\d{1,3}\.){3}\d{1,3}$/.test(url.hostname);
+            const hostnameParts = url.hostname.split(".");
+            if (
+              !isIpv4 &&
+              hostnameParts[hostnameParts.length - 1].length < 2
+            ) {
+              return null;
+            }
             return url.protocol === "http:" || url.protocol === "https:"
               ? url.href
               : null;
@@ -95,7 +103,7 @@ function renderMessage(message) {
       const image = document.createElement("img");
       image.className = "message-image";
       image.alt = "Imagem enviada";
-      image.loading = "lazy";
+      image.loading = "eager";
       image.addEventListener(
         "error",
         () => {

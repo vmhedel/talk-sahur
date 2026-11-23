@@ -1,5 +1,10 @@
-const CACHE_NAME = "tung-tung-sahur-v7";
-const ASSETS = ["./", "./index.html", "./styles.css", "./app.js"];
+const CACHE_NAME = "tung-tung-sahur-v8";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./styles.css?v=1.0.2",
+  "./app.js?v=1.0.2",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
