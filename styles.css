@@ -18,6 +18,18 @@ body {
   color: #f5e6d3;
 }
 
+.app-version {
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  padding: 4px 7px;
+  background: rgba(20, 14, 10, 0.75);
+  color: #f5e6d3;
+  font-size: 11px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
 .page {
   max-width: 480px;
   margin: 0 auto;
