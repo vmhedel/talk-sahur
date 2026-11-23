@@ -6,8 +6,11 @@ const sendButton = document.querySelector("#send-button");
 const messages = document.querySelector("#messages");
 const maxVisibleMessages = 100;
 const topic = "talk-sahur/vmhedel/tung-tung-sahur/messages";
-const senderId = crypto.randomUUID();
-const mqtt = window.mqtt;
+const senderId =
+  typeof crypto?.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+const mqttLib = window.mqtt;
 let client;
 let connected = false;
 
@@ -94,12 +97,12 @@ function renderMessage(message) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-if (!mqtt) {
+if (!mqttLib) {
   status.textContent = "Falha ao carregar o chat";
   sendButton.disabled = true;
 } else {
   try {
-    client = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
+    client = mqttLib.connect("wss://broker.emqx.io:8084/mqtt", {
       clientId: `talk-sahur-${senderId}`,
       clean: true,
       connectTimeout: 10000,
